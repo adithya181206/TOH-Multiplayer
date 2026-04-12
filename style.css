@@ -1,0 +1,1017 @@
+:root {
+  --bg-color-1: #0f172a;
+  --bg-color-2: #1e1b4b;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --primary: #6366f1;
+  --secondary: #8b5cf6;
+  --accent: #22d3ee;
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-main);
+  background: radial-gradient(circle at top right, var(--bg-color-2), var(--bg-color-1) 80%);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Strictly prevent body from scrolling */
+  
+  /* Native App Emulation */
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh */
+  -webkit-touch-callout: none; /* Prevent iOS callout on long press */
+  user-select: none; /* Prevent text highlighting */
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent; /* Remove blue highlight when tapping */
+}
+
+/* When game is active, lock body to exactly viewport height */
+body.game-active {
+  height: 100svh;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1400px;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.info-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 25px;
+  border-radius: 15px;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  gap: 20px;
+  align-items: stretch;
+  flex: 1; /* Take remaining space */
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Pre-game: board & chat hidden — center the setup panel */
+body:not(.game-active) main {
+  grid-template-columns: minmax(300px, 480px);
+  justify-content: center;
+  align-items: start; /* Don't stretch the start form vertically when not playing */
+}
+
+/* Game active: align sidebar tops with board */
+body.game-active main {
+  grid-auto-rows: 1fr;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%; /* Fill the grid area */
+  min-height: 0;
+  overflow-y: auto; /* Internal scrolling if screen is too short */
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for sidebars */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  /* Allow typing and selecting in inputs! */
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+}
+
+/* Dropdown option styling — fix grey/invisible text */
+select option {
+  background-color: #1e1b4b;
+  color: #f1f5f9;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.multi-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--text-sub);
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+.room-code-display {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid var(--glass-border);
+}
+
+.highlight-code {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 3px;
+}
+
+button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #f43f5e, #be123c);
+  color: white;
+}
+
+.instructions ul {
+  padding-left: 20px;
+  color: var(--text-sub);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.instructions li {
+  margin-bottom: 8px;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Fill available space evenly */
+  flex: 1;
+  min-height: 0;
+  justify-content: center; /* Center the board vertically */
+  align-items: center; /* Center the board horizontally if needed, or stretch */
+}
+
+.board {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  /* 3/4 layout logic but perfectly clipped within flex logic */
+  flex: 0 1 75%; /* 3/4 of the available vertical space */
+  width: 100%;
+  min-height: 0;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tower {
+  width: 30%;
+  height: 90%;       /* fills board height dynamically */
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tower:hover .rod {
+  background: linear-gradient(to top, #94a3b8, #fff);
+}
+
+.tower.selected .disk:last-child {
+  transform: translateY(-40px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.tower.invalid-move {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.rod {
+  position: absolute;
+  bottom: 20px;
+  width: 14px;
+  height: 75%;       /* scales with tower height */
+  background: linear-gradient(to top, #475569, #94a3b8);
+  border-radius: 10px 10px 0 0;
+  transition: background 0.3s;
+  z-index: 1;
+}
+
+.base {
+  position: absolute;
+  bottom: 0;
+  width: 90%;
+  height: 20px;
+  background: linear-gradient(to bottom, #475569, #1e293b);
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.disk-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  z-index: 2;
+  padding-bottom: 20px;
+}
+
+.disk {
+  height: 30px;
+  margin-top: -2px;
+  border-radius: 15px;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow:
+    inset 0 2px 8px rgba(255, 255, 255, 0.4),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.4),
+    0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.target-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(34, 211, 238, 0.1), transparent 70%);
+  opacity: 0.5;
+  animation: pulse 2s infinite;
+  pointer-events: none;
+}
+
+.target-label {
+  position: absolute;
+  top: 0;
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+}
+
+.emoji-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px;
+}
+
+.emoji-bar span {
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+.emoji-btn {
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.5rem;
+  padding: 10px 15px;
+  border-radius: 15px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.emoji-btn:hover {
+  transform: scale(1.2);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-section {
+  display: none;
+  height: 100%;
+  flex-direction: column;
+}
+
+.chat-box {
+  flex: 1;
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-msg {
+  max-width: 80%;
+  padding: 8px 13px;
+  border-radius: 18px;
+  font-size: 0.88rem;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+/* Messages FROM others — left side */
+.chat-msg.received {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom-left-radius: 4px;
+  color: #e2e8f0;
+}
+
+.chat-msg.received .chat-sender {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+/* Messages FROM me — right side */
+.chat-msg.sent {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-bottom-right-radius: 4px;
+  color: #fff;
+  text-align: right;
+}
+
+.chat-msg.sent .chat-sender {
+  display: none;
+  /* No need to show your own name */
+}
+
+.chat-msg.system {
+  align-self: center;
+  text-align: center;
+  color: var(--accent);
+  font-style: italic;
+  background: none;
+  font-size: 0.8rem;
+}
+
+.chat-input-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input-wrapper input {
+  flex: 1;
+}
+
+.config-alert {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.config-alert h2 {
+  color: var(--danger);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-box {
+  width: 92%;
+  max-width: 560px;
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-box h2 {
+  font-size: 2.5rem;
+  color: gold;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+.results-content {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.results-content ol {
+  padding-left: 25px;
+  margin: 10px 0;
+  font-size: 1.1rem;
+}
+
+.results-content li {
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.results-content li:first-child {
+  color: gold;
+  font-weight: 800;
+}
+
+.results-content li:nth-child(2) {
+  color: silver;
+}
+
+.results-content li:nth-child(3) {
+  color: #cd7f32;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  min-width: 120px;
+}
+
+#playAgainBtn {
+  display: none;
+  /* Hidden until all players finish — JS reveals it */
+}
+
+/* Floating emojis */
+#floating-emojis-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.floating-emoji {
+  position: absolute;
+  font-size: 2rem;
+  animation: floatUp 3s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translateY(-50px) scale(1.5);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateY(-200px) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-250px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ===================== RESPONSIVE / MOBILE ===================== */
+
+/* --- Tablet (≤1100px) --- */
+@media (max-width: 1100px) {
+  main {
+    grid-template-columns: 260px 1fr;
+  }
+
+  .right-sidebar {
+    grid-column: 1 / -1;
+  }
+
+  .chat-box {
+    max-height: 200px;
+  }
+}
+
+/* Single player game mode — hide chat and emoji completely */
+body.game-active.single-mode .right-sidebar,
+body.game-active.single-mode .emoji-bar {
+  display: none !important;
+}
+
+/* ============================================================
+   MOBILE GAME MODE: body.game-active on ≤768px
+   ============================================================ */
+@media (max-width: 768px) {
+  body.game-active .left-sidebar {
+    display: none;
+  }
+
+  body.game-active main {
+    grid-template-columns: 1fr;
+    padding-bottom: 0; /* No padding by default */
+  }
+
+  /* Only multiplayer needs bottom padding for pinned chat */
+  body.game-active:not(.single-mode) main {
+    padding-bottom: 160px;
+  }
+
+  body.game-active .board-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Right sidebar (chat) becomes a fixed bottom panel */
+  body.game-active .right-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto; /* Prevent taking 100% viewport height */
+    z-index: 50;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0;
+    padding: 0;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  body.game-active .chat-section {
+    display: flex !important;
+    flex-direction: column;
+    border-radius: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* Collapsible chat box — stays compact unless expanded */
+  body.game-active .chat-box {
+    min-height: 0;
+    max-height: 100px;
+    overflow-y: auto;
+    border-radius: 0;
+    margin: 0;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Always show the input bar at bottom */
+  body.game-active .chat-input-wrapper {
+    padding: 8px 12px;
+    gap: 8px;
+    margin: 0;
+  }
+
+  body.game-active #chatTitle {
+    padding: 8px 12px 4px;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    color: var(--text-sub);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* --- Mobile (≤768px) --- */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .info-panel {
+    padding: 8px 16px;
+  }
+
+  .info-value {
+    font-size: 1.2rem;
+  }
+
+  main {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Setup panel: compact on mobile */
+  .glass-panel {
+    padding: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  input,
+  select {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    padding: 11px;
+    font-size: 0.95rem;
+  }
+
+  /* Tabs */
+  .multi-tabs {
+    margin-bottom: 14px;
+  }
+
+  .tab-btn {
+    padding: 9px;
+    font-size: 0.85rem;
+  }
+
+  /* Room code box */
+  .highlight-code {
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+  }
+
+  /* Board */
+  .board-container {
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+    justify-content: center;
+  }
+
+  .board {
+    flex: 0 1 75%; /* 3/4 space on mobile too */
+    width: 100%;
+    padding: 10px 8px;
+    position: relative;
+    min-height: 0;
+  }
+
+  .tower {
+    height: 90%;      /* percentage of board — scales automatically */
+    width: 32%;
+  }
+
+  .rod {
+    height: 75%;      /* percentage of tower */
+    width: 9px;
+  }
+
+  .base {
+    height: 11px;
+  }
+
+  .disk {
+    height: 22px;
+    font-size: 0.72rem;
+    border-radius: 6px;
+  }
+
+  .target-label {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+
+  /* Emoji bar */
+  .emoji-bar {
+    gap: 8px;
+    padding: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .emoji-btn {
+    font-size: 1.3rem;
+    padding: 8px 10px;
+  }
+
+  .emoji-bar span {
+    font-size: 0.85rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Chat */
+  .chat-section {
+    display: flex !important;
+    /* Override inline none on mobile after game starts */
+  }
+
+  .chat-box {
+    min-height: 140px;
+    max-height: 180px;
+  }
+
+  .chat-input-wrapper {
+    gap: 8px;
+  }
+
+  .chat-input-wrapper input {
+    font-size: 0.9rem;
+    padding: 9px;
+  }
+
+  .chat-input-wrapper button {
+    padding: 9px 14px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Modal */
+  .modal-box {
+    width: 95%;
+    padding: 20px 16px;
+  }
+
+  .modal-box h2 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+  /* Waiting overlay text */
+  #waitingOverlay h2 {
+    font-size: 1.3rem;
+  }
+
+  #waitingCount {
+    font-size: 1rem;
+  }
+
+  #startGameSyncBtn {
+    font-size: 1rem !important;
+    padding: 10px 24px !important;
+  }
+}
+
+/* --- Small phones (≤420px) --- */
+@media (max-width: 420px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  /* board/tower/rod use % so no fixed px overrides needed here */
+
+  .rod {
+    width: 8px;
+  }
+
+  .disk {
+    height: 18px;
+    font-size: 0.65rem;
+  }
+
+  .highlight-code {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+  }
+
+  .emoji-btn {
+    font-size: 1.1rem;
+    padding: 6px 8px;
+  }
+
+  .chat-box {
+    max-height: 150px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
