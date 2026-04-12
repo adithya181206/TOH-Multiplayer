@@ -23,14 +23,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <link rel="stylesheet" href="style.css?v=1.12">
+    <link rel="stylesheet" href="style.css?v=1.13">
 </head>
 
 <body>
     <div class="app-container">
         <header>
             <h1>🗼 Towers of <span>Hanoi</span></h1>
+            
             <div id="gameControls" style="display:none; align-items:center; gap:15px;">
+                <!-- Room code display during gameplay -->
+                <div class="glass-panel" id="roomCodeTopDisplay" style="display:none; padding: 8px 16px; border-radius: 12px;">
+                    <span class="info-label" style="font-size: 0.7rem; display: block; line-height: 1;">Code</span>
+                    <span id="activeRoomCodeText" class="info-value" style="font-size: 1.1rem;">----</span>
+                </div>
+                
                 <button id="exitGameBtn" class="btn-danger" style="padding: 10px 18px; font-weight: bold; border-radius: 12px; font-size: 0.9rem;">
                     Exit
                 </button>
@@ -74,7 +81,11 @@
                                     <option value="3">3 Players</option>
                                     <option value="4">4 Players</option>
                                     <option value="5">5 Players</option>
+                                    <option value="6">6 Players</option>
+                                    <option value="7">7 Players</option>
                                     <option value="8">8 Players</option>
+                                    <option value="9">9 Players</option>
+                                    <option value="10">10 Players</option>
                                 </select>
                             </div>
                         </div>
@@ -187,6 +198,6 @@
 
     <div id="floating-emojis-container"></div>
 
-    <script src="script.js?v=1.12"></script>
+    <script src="script.js?v=1.13"></script>
 </body>
 </html>

@@ -188,12 +188,23 @@ function startGame() {
         document.body.classList.remove('single-mode');
         document.getElementById("chatSidebar").style.display = "block";
         document.getElementById("waitingOverlay").style.display = "flex";
+        
+        const topRoomDisplay = document.getElementById("roomCodeTopDisplay");
+        if (topRoomDisplay) {
+            topRoomDisplay.style.display = "flex";
+            document.getElementById("activeRoomCodeText").textContent = activeRoomId;
+        }
+        
         gameStarted = false;
         joinMultiplayer();
     } else {
         document.body.classList.add('single-mode');
         document.getElementById("chatSidebar").style.display = "none";
         document.getElementById("waitingOverlay").style.display = "none";
+        
+        const topRoomDisplay = document.getElementById("roomCodeTopDisplay");
+        if (topRoomDisplay) topRoomDisplay.style.display = "none";
+        
         gameStarted = true;
         chatSection.style.display = "none";
         emojiBar.style.display = "none";
