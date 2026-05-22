@@ -10,17 +10,47 @@ const firebaseConfig = {
 };
 
 let db = null;
+let isFirebaseConnected = false;
 
 try {
     if (typeof firebase !== 'undefined') {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
-        console.log("✅ Firebase connected successfully.");
+        
+        // Listen to Firebase connectivity state
+        db.ref(".info/connected").on("value", (snap) => {
+            const badge = document.getElementById("firebaseStatusBadge");
+            if (snap.val() === true) {
+                isFirebaseConnected = true;
+                if (badge && !badge.classList.contains("status-error")) {
+                    badge.className = "status-badge status-connected";
+                    badge.textContent = "Online";
+                }
+                console.log("✅ Firebase connection established.");
+            } else {
+                isFirebaseConnected = false;
+                if (badge && !badge.classList.contains("status-error")) {
+                    badge.className = "status-badge status-disconnected";
+                    badge.textContent = "Offline";
+                }
+                console.warn("⚠️ Firebase connection lost.");
+            }
+        });
     } else {
         console.warn("Firebase SDK not loaded. Multiplayer features will not work offline.");
+        const badge = document.getElementById("firebaseStatusBadge");
+        if (badge) {
+            badge.className = "status-badge status-disconnected";
+            badge.textContent = "Not Loaded";
+        }
     }
 } catch (e) {
     console.error("Firebase init failed:", e);
+    const badge = document.getElementById("firebaseStatusBadge");
+    if (badge) {
+        badge.className = "status-badge status-error";
+        badge.textContent = "Init Error";
+    }
 }
 
 // --- Game Variables ---
@@ -281,6 +311,12 @@ towersEl.forEach(t => {
 // --- Multiplayer Logic ---
 async function joinMultiplayer() {
     try {
+        const badge = document.getElementById("firebaseStatusBadge");
+        if (badge && badge.classList.contains("status-error")) {
+            badge.className = "status-badge status-connected";
+            badge.textContent = "Online";
+        }
+
         chatSection.style.display = "flex";
         emojiBar.style.display = "flex";
         
@@ -384,7 +420,21 @@ async function joinMultiplayer() {
 
     } catch (e) {
         console.error("Multiplayer Sync Error:", e);
-        alert("❌ Firebase connection failed. Please check your internet connection and try again.");
+        const badge = document.getElementById("firebaseStatusBadge");
+        
+        if (e && (e.code === "PERMISSION_DENIED" || (e.message && (e.message.includes("permission_denied") || e.message.includes("Permission denied"))))) {
+            if (badge) {
+                badge.className = "status-badge status-error";
+                badge.textContent = "Rules Error";
+            }
+            alert("❌ Firebase Permission Denied!\n\nThis occurs because your Firebase Realtime Database Rules restrict read/write access.\n\nTo fix this:\n1. Open your Firebase Console.\n2. Navigate to Build -> Realtime Database -> Rules.\n3. Replace your rules with:\n\n{\n  \"rules\": {\n    \"rooms\": {\n      \"$room_id\": {\n        \".read\": \"true\",\n        \".write\": \"true\"\n      }\n    }\n  }\n}\n\n4. Click 'Publish'.\n\nSee console log for full technical details.");
+        } else {
+            if (badge) {
+                badge.className = "status-badge status-error";
+                badge.textContent = "Sync Error";
+            }
+            alert("❌ Firebase connection failed. Please check your internet connection and try again.");
+        }
     }
 }
 
