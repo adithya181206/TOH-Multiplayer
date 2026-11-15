@@ -2,7 +2,7 @@
 
 > A real-time multiplayer implementation of the classic Towers of Hanoi puzzle featuring synchronized room lobbies, live move validation, and competitive race/leaderboard mechanics.
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live_Preview-00d26a?style=for-the-badge&logo=vercel&logoColor=white)](https://adithya181206.github.io/toh/)
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Preview-00d26a?style=for-the-badge&logo=vercel&logoColor=white)](https://toh-multiplayer.vercel.app/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5 / CSS3](https://img.shields.io/badge/Frontend-HTML5_%2F_Glassmorphism_CSS3-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![Firebase](https://img.shields.io/badge/Multiplayer-Firebase_Realtime_DB-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
@@ -13,7 +13,9 @@
 
 ## Visual Preview
 
-![Towers of Hanoi Multiplayer Preview](./assets/preview.png)
+> 🌐 **Live Demo & Deployment:** [https://toh-multiplayer.vercel.app/](https://toh-multiplayer.vercel.app/)
+
+[![Towers of Hanoi Multiplayer Preview](./assets/preview.png)](https://toh-multiplayer.vercel.app/)
 
 ---
 
