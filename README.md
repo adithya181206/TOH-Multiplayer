@@ -158,8 +158,8 @@ toh/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/adithya181206/toh.git
-cd toh
+git clone https://github.com/adithya181206/TOH-Multiplayer.git
+cd TOH-Multiplayer
 ```
 
 ---
@@ -288,7 +288,7 @@ Developed and engineered by **Etikala Adithya**:
 * **Degree**: B.Tech in Computer Science and Engineering
 * **Institution**: B V Raju Institute of Technology (BVRIT)
 * **GitHub**: [@adithya181206](https://github.com/adithya181206)
-* **Repository**: [adithya181206/toh](https://github.com/adithya181206/toh)
+* **Repository**: [adithya181206/TOH-Multiplayer](https://github.com/adithya181206/TOH-Multiplayer)
 
 This project is licensed under the terms of the [MIT License](LICENSE).
 
